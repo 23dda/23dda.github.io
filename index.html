@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YANG Jiayu — Finance Researcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
+:root {
+  --accent: oklch(72% 0.14 165);
+  --accent2: oklch(72% 0.14 255);
+  --gold: oklch(78% 0.12 80);
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'DM Mono', monospace;
+  --radius: 8px;
+  --transition: 0.25s ease;
+}
+
+/* DARK */
+[data-theme="dark"] {
+  --bg: #0b1120;
+  --bg2: #111827;
+  --bg3: #1a2540;
+  --fg: #f0ead8;
+  --fg2: #c9c0a8;
+  --fg3: #87816e;
+  --border: rgba(240,234,216,0.08);
+  --border-hover: rgba(72,160,120,0.35);
+  --card-bg: rgba(240,234,216,0.02);
+  --nav-bg: rgba(11,17,32,0.88);
+}
+
+/* LIGHT */
+[data-theme="light"] {
+  --bg: #f5f1e8;
+  --bg2: #ede8dc;
+  --bg3: #e2dccf;
+  --fg: #141824;
+  --fg2: #3a3d4f;
+  --fg3: #7a7d8f;
+  --border: rgba(20,24,36,0.1);
+  --border-hover: rgba(40,160,110,0.4);
+  --card-bg: rgba(20,24,36,0.03);
+  --nav-bg: rgba(245,241,232,0.9);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 3.5rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s, background var(--transition);
+}
+nav.scrolled { padding: 0.7rem 3.5rem; }
+.nav-logo {
+  font-family: var(--serif); font-size: 1rem;
+  letter-spacing: 0.06em; color: var(--fg); text-decoration: none;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg2); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-controls { display: flex; gap: 0.6rem; align-items: center; }
+.ctrl-btn {
+  font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.08em; padding: 0.3rem 0.7rem;
+  border-radius: 4px; border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--fg2);
+  cursor: pointer; transition: all 0.2s;
+}
+.ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ctrl-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(72,160,120,0.1); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 7rem 3.5rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 60% at 75% 35%, rgba(72,160,120,0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 55% at 25% 65%, rgba(80,100,200,0.07) 0%, transparent 70%);
+}
+[data-theme="light"] .hero-bg {
+  background:
+    radial-gradient(ellipse 55% 60% at 75% 35%, rgba(40,160,110,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 55% at 25% 65%, rgba(60,80,200,0.05) 0%, transparent 70%);
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-inner {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 5rem; align-items: center; width: 100%; max-width: 1100px; margin: 0 auto;
+}
+.hero-text {}
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1.4rem;
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-name {
+  font-family: var(--serif); font-size: clamp(3rem, 6.5vw, 6.5rem);
+  font-weight: 700; line-height: 1.0; letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-name-cn {
+  font-family: var(--serif); font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 400; font-style: italic; color: var(--fg2);
+  margin-bottom: 1.8rem;
+  opacity: 0; animation: fadeUp 0.8s 0.55s forwards;
+}
+.hero-desc {
+  max-width: 520px; font-size: 1rem; color: var(--fg2);
+  line-height: 1.85; margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-desc strong { color: var(--fg); font-weight: 500; }
+.hero-tags {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.85s forwards;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em;
+  padding: 0.3rem 0.8rem; border-radius: 2rem;
+  border: 1px solid var(--border); color: var(--fg2); background: var(--card-bg);
+}
+.hero-cta {
+  display: flex; gap: 0.9rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.8s 1s forwards;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1.6rem; border-radius: 4px;
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; transition: all 0.2s; cursor: pointer; border: none;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Avatar */
+.hero-avatar {
+  opacity: 0; animation: fadeIn 1s 0.6s forwards;
+}
+.hero-avatar img {
+  width: 220px; height: 270px; object-fit: cover; object-position: top;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+[data-theme="light"] .hero-avatar img { box-shadow: 0 24px 60px rgba(0,0,0,0.12); }
+
+/* ── SECTIONS ── */
+.section-wrap { padding: 6rem 3.5rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label {
+  font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;
+}
+.section-title {
+  font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 600; line-height: 1.2; margin-bottom: 3rem;
+}
+.section-title em { font-style: italic; color: var(--fg2); }
+hr.divider { border: none; border-top: 1px solid var(--border); }
+
+/* ── ABOUT ── */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.about-text p { font-size: 0.97rem; color: var(--fg2); margin-bottom: 1.1rem; line-height: 1.9; }
+.about-text p strong { color: var(--fg); font-weight: 500; }
+.edu-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.edu-item {
+  padding: 1.4rem 1.5rem; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card-bg); transition: border-color 0.2s, background 0.2s;
+}
+.edu-item:hover { border-color: var(--border-hover); background: rgba(72,160,120,0.03); }
+.edu-school { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; margin-bottom: 0.2rem; }
+.edu-degree { font-size: 0.85rem; color: var(--fg2); margin-bottom: 0.6rem; }
+.edu-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.edu-badge {
+  font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.05em;
+  padding: 0.18rem 0.55rem; border-radius: 3px;
+  background: rgba(72,160,120,0.12); color: var(--accent);
+}
+.edu-date { font-family: var(--mono); font-size: 0.7rem; color: var(--fg3); }
+
+/* ── AWARDS ── */
+.awards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+.award-item {
+  padding: 1.2rem 1.4rem; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--card-bg);
+}
+.award-name { font-size: 0.88rem; font-weight: 500; color: var(--fg); margin-bottom: 0.3rem; }
+.award-meta { font-family: var(--mono); font-size: 0.68rem; color: var(--fg3); }
+
+/* ── PUBLICATIONS ── */
+.pub-list { display: flex; flex-direction: column; }
+.pub-item {
+  padding: 2rem 0; border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 2.5rem 1fr; gap: 1.5rem; align-items: start;
+}
+.pub-num { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); padding-top: 0.2rem; }
+.pub-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.35rem; }
+.pub-authors { font-size: 0.83rem; color: var(--fg2); margin-bottom: 0.4rem; }
+.pub-authors strong { color: var(--fg); font-weight: 600; }
+.pub-journal { font-size: 0.83rem; font-style: italic; color: var(--fg2); margin-bottom: 0.6rem; }
+.pub-badges { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+.badge {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.05em;
+  padding: 0.18rem 0.5rem; border-radius: 3px; border: 1px solid;
+}
+.badge-q1 { border-color: var(--accent); color: var(--accent); background: rgba(72,160,120,0.08); }
+.badge-q2 { border-color: var(--gold); color: var(--gold); background: rgba(200,180,80,0.08); }
+.badge-rr { border-color: var(--accent2); color: var(--accent2); background: rgba(80,100,200,0.08); }
+.badge-review { border-color: var(--fg3); color: var(--fg3); }
+.badge-prep { border-color: var(--border); color: var(--fg3); }
+
+/* ── WP list ── */
+.wp-list { display: flex; flex-direction: column; }
+.wp-item {
+  padding: 1.3rem 0; border-bottom: 1px solid rgba(240,234,216,0.05);
+  display: grid; grid-template-columns: 10px 1fr; gap: 1.2rem; align-items: start;
+}
+[data-theme="light"] .wp-item { border-bottom-color: rgba(20,24,36,0.07); }
+.wp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--fg3); margin-top: 0.72rem; min-width: 6px; }
+.wp-dot.active { background: var(--accent); }
+.wp-title { font-size: 0.93rem; color: var(--fg); line-height: 1.5; margin-bottom: 0.25rem; }
+.wp-authors { font-size: 0.8rem; color: var(--fg3); }
+.wp-authors strong { color: var(--fg2); font-weight: 500; }
+
+/* ── TIMELINE ── */
+.timeline { display: flex; flex-direction: column; }
+.tl-item {
+  display: grid; grid-template-columns: 180px 1fr;
+  gap: 2rem; padding: 2.2rem 0; border-bottom: 1px solid var(--border);
+}
+.tl-date { font-family: var(--mono); font-size: 0.7rem; color: var(--fg3); line-height: 1.7; padding-top: 0.15rem; }
+.tl-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; margin-bottom: 0.2rem; }
+.tl-place { font-size: 0.83rem; color: var(--accent); margin-bottom: 0.1rem; }
+.tl-sup { font-size: 0.8rem; color: var(--fg3); font-style: italic; margin-bottom: 0.8rem; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+.tl-bullets li {
+  font-size: 0.88rem; color: var(--fg2);
+  padding-left: 1.2rem; position: relative; line-height: 1.7;
+}
+.tl-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.72rem; top: 0.2rem; }
+
+/* ── SKILLS ── */
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.skill-group-label {
+  font-family: var(--mono); font-size: 0.67rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--fg3); margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.skill-tag {
+  font-size: 0.78rem; padding: 0.28rem 0.7rem; border-radius: 3px;
+  background: var(--card-bg); border: 1px solid var(--border); color: var(--fg2);
+}
+
+/* ── CONTACT ── */
+.contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.contact-text { font-size: 0.97rem; color: var(--fg2); line-height: 1.9; }
+.contact-links { display: flex; flex-direction: column; gap: 0.9rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.9rem 1.1rem; border: 1px solid var(--border);
+  border-radius: var(--radius); text-decoration: none; color: var(--fg2);
+  font-size: 0.86rem; transition: all 0.2s; background: var(--card-bg);
+}
+.contact-link:hover { border-color: var(--border-hover); color: var(--fg); background: rgba(72,160,120,0.04); }
+.contact-link-icon { font-size: 1rem; min-width: 1.2rem; color: var(--accent); }
+.contact-link-label { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; color: var(--fg3); display: block; margin-bottom: 0.1rem; text-transform: uppercase; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 2.5rem 3.5rem;
+  font-family: var(--mono); font-size: 0.68rem;
+  color: var(--fg3); letter-spacing: 0.1em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.reveal { opacity:0; transform:translateY(18px); transition: opacity 0.65s, transform 0.65s; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ── LANG hidden ── */
+[data-lang="en"] .zh { display: none; }
+[data-lang="zh"] .en { display: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .section-wrap { padding: 4rem 1.5rem; }
+  .hero { padding: 6.5rem 1.5rem 3rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero-avatar { order: -1; }
+  .hero-avatar img { width: 140px; height: 170px; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .tl-item { grid-template-columns: 1fr; gap: 0.4rem; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .awards-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 540px) {
+  .awards-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">J<span>.</span>Y</a>
+  <ul class="nav-links">
+    <li><a href="#about"><span class="en">About</span><span class="zh">关于</span></a></li>
+    <li><a href="#publications"><span class="en">Publications</span><span class="zh">论文</span></a></li>
+    <li><a href="#research"><span class="en">Research</span><span class="zh">科研</span></a></li>
+    <li><a href="#experience"><span class="en">Experience</span><span class="zh">经历</span></a></li>
+    <li><a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a></li>
+  </ul>
+  <div class="nav-controls">
+    <button class="ctrl-btn" id="langBtn" onclick="toggleLang()">中文</button>
+    <button class="ctrl-btn" id="themeBtn" onclick="toggleTheme()"><span class="en">Light</span><span class="zh">浅色</span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow en">Finance Researcher · FinTech · PhD Aspirant</p>
+      <p class="hero-eyebrow zh">金融研究 · 金融科技 · 博士申请中</p>
+      <h1 class="hero-name">YANG Jiayu</h1>
+      <p class="hero-name-cn">杨嘉雨</p>
+      <p class="hero-desc en">
+        M.S. candidate in Financial Technology at <strong>Zhejiang University</strong>. My research sits at the intersection of <strong>climate finance</strong>, <strong>corporate governance</strong>, and <strong>empirical asset pricing</strong> — using large-scale panel data and causal inference to understand how physical and social risks shape firm behavior and financial markets.
+      </p>
+      <p class="hero-desc zh">
+        浙江大学金融科技硕士在读。研究聚焦于<strong>气候金融</strong>、<strong>公司治理</strong>与<strong>实证资产定价</strong>的交叉领域，运用大规模面板数据与因果推断方法，探究物理风险与社会风险如何影响企业行为和金融市场。
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag en">Corporate Finance</span>
+        <span class="hero-tag zh">公司金融</span>
+        <span class="hero-tag en">Climate Finance</span>
+        <span class="hero-tag zh">气候金融</span>
+        <span class="hero-tag en">ESG / CSR</span>
+        <span class="hero-tag zh">ESG / 企业社会责任</span>
+        <span class="hero-tag en">Empirical Asset Pricing</span>
+        <span class="hero-tag zh">实证资产定价</span>
+        <span class="hero-tag en">FinTech</span>
+        <span class="hero-tag zh">金融科技</span>
+        <span class="hero-tag en">Managerial Behavior</span>
+        <span class="hero-tag zh">管理者行为</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#publications" class="btn btn-primary en">View Publications</a>
+        <a href="#publications" class="btn btn-primary zh">查看论文</a>
+        <a href="mailto:jiayu_yang@zju.edu.cn" class="btn btn-outline">jiayu_yang@zju.edu.cn</a>
+      </div>
+    </div>
+    <div class="hero-avatar">
+      <img src="uploads/avatar2.jpeg" alt="YANG Jiayu" />
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ABOUT -->
+<div class="section-wrap" id="about">
+  <div class="section-inner">
+    <p class="section-label reveal en">01 — About</p>
+    <p class="section-label reveal zh">01 — 关于我</p>
+    <h2 class="section-title reveal">
+      <span class="en">The <em>researcher</em> behind the work</span>
+      <span class="zh">研究者<em>其人</em></span>
+    </h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p class="en">I am a first-year M.S. student in <strong>Financial Technology</strong> at the International Business School (ZIBS), Zhejiang University, admitted through merit-based recommendation (Top 1%). I am actively applying for PhD programs in Finance.</p>
+        <p class="zh">我是浙江大学国际联合商学院（ZIBS）<strong>金融科技</strong>专业硕士一年级在读，通过推免方式（专业前1%）录取，目前正积极申请金融方向博士项目。</p>
+
+        <p class="en">I completed my B.S. in Financial Technology at <strong>Shenzhen University's WeBank Institute of FinTech</strong>, graduating <strong>ranked 1st out of 60</strong> with an average score of 89/100 and GPA 4.09/4.50. My undergraduate thesis work led to two peer-reviewed publications.</p>
+        <p class="zh">本科就读于<strong>深圳大学金融科技学院（微众银行金融科技学院）</strong>，毕业时<strong>专业排名第1/60</strong>，均分89分，GPA 4.09/4.50，本科阶段即发表两篇SSCI期刊论文。</p>
+
+        <p class="en">My research uses panel data econometrics, causal inference (DID, PSM, Heckman, IV), and machine learning to study how environmental and social shocks propagate through financial markets and corporate supply chains.</p>
+        <p class="zh">研究方法涵盖面板数据计量、因果推断（双重差分、PSM、Heckman、工具变量）及机器学习，聚焦环境与社会冲击如何通过金融市场和企业供应链传导的问题。</p>
+
+        <p class="en">Outside academia, I have gained industry experience at <strong>WeBank</strong> (AI Audit Intern) and <strong>Guotai Junan Securities</strong> (Technology Research Analyst).</p>
+        <p class="zh">产业经历方面，曾于<strong>微众银行</strong>（AI审计实习生）和<strong>国泰君安证券</strong>（科技行业研究分析师）实习。</p>
+      </div>
+      <div>
+        <div class="edu-list reveal">
+          <div class="edu-item">
+            <div class="edu-school en">Zhejiang University</div>
+            <div class="edu-school zh">浙江大学</div>
+            <div class="edu-degree en">M.S. in Financial Technology · International Business School (ZIBS)</div>
+            <div class="edu-degree zh">金融科技硕士 · 国际联合商学院（ZIBS）</div>
+            <div class="edu-meta">
+              <span class="edu-date">2025.09 — 2027.06</span>
+              <span class="edu-badge en">Avg 90/100</span>
+              <span class="edu-badge zh">均分90</span>
+              <span class="edu-badge en">Merit Recommendation</span>
+              <span class="edu-badge zh">推免录取</span>
+            </div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-school en">Shenzhen University</div>
+            <div class="edu-school zh">深圳大学</div>
+            <div class="edu-degree en">B.S. in Financial Technology · WeBank Institute of FinTech</div>
+            <div class="edu-degree zh">金融科技学士 · 微众银行金融科技学院</div>
+            <div class="edu-meta">
+              <span class="edu-date">2021.09 — 2025.06</span>
+              <span class="edu-badge en">Rank 1/60</span>
+              <span class="edu-badge zh">专业第1/60</span>
+              <span class="edu-badge">GPA 4.09/4.50</span>
+              <span class="edu-badge en">Avg 89/100</span>
+              <span class="edu-badge zh">均分89</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="awards-grid reveal" style="margin-top:1.8rem;">
+          <div class="award-item">
+            <div class="award-name en">National Scholarship</div>
+            <div class="award-name zh">国家奖学金</div>
+            <div class="award-meta">2024</div>
+          </div>
+          <div class="award-item">
+            <div class="award-name en">SZU Full Admission Scholarship</div>
+            <div class="award-name zh">深大人才全额入学奖学金</div>
+            <div class="award-meta">2021</div>
+          </div>
+          <div class="award-item">
+            <div class="award-name en">SZU First-Class Scholarship</div>
+            <div class="award-name zh">深大一等奖学金</div>
+            <div class="award-meta">2022 · 2023 · 2024</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- PUBLICATIONS -->
+<div class="section-wrap" id="publications">
+  <div class="section-inner">
+    <p class="section-label reveal en">02 — Publications</p>
+    <p class="section-label reveal zh">02 — 论文发表</p>
+    <h2 class="section-title reveal">
+      <span class="en">Peer-reviewed <em>work</em></span>
+      <span class="zh">同行评审<em>论文</em></span>
+    </h2>
+
+    <div class="pub-list reveal">
+      <div class="pub-item">
+        <div class="pub-num">01</div>
+        <div>
+          <div class="pub-title">Corporate Social Responsibility and Firm Litigation Risk: Evidence from China</div>
+          <div class="pub-authors">Wang, Y. Y., <strong>Yang, J.</strong>, &amp; Zhao, Y.</div>
+          <div class="pub-journal">International Review of Financial Analysis &nbsp;(forthcoming, 2nd R&amp;R accepted)</div>
+          <div class="pub-badges">
+            <span class="badge badge-rr">2nd R&amp;R → Accepted</span>
+            <span class="badge badge-q1">SSCI Q1</span>
+            <span class="badge badge-q1">IF = 5.6</span>
+            <span class="badge badge-q1 en">1st Student Author</span>
+            <span class="badge badge-q1 zh">学生一作</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">02</div>
+        <div>
+          <div class="pub-title">Capital Market Opening and Related Party Transactions: Quasi-Natural Experimental Evidence from China</div>
+          <div class="pub-authors">Zhang, P., Feng, J., <strong>Yang, J.</strong>, &amp; Yan, J. (2025)</div>
+          <div class="pub-journal">Applied Economics, 57(40), 6333–6345</div>
+          <div class="pub-badges">
+            <span class="badge badge-q2">SSCI Q2</span>
+            <span class="badge badge-q2">IF = 2.2</span>
+            <span class="badge badge-q2 en">2nd Author</span>
+            <span class="badge badge-q2 zh">学生二作</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">03</div>
+        <div>
+          <div class="pub-title en">Countermeasures and Suggestions for Managing the Dilemmas of Large Private Real Estate Enterprises under the Background of "31 Measures for Private Economy"</div>
+          <div class="pub-title zh">"民营经济31条"背景下大型民营房地产企业困境治理的对策与建议</div>
+          <div class="pub-authors">赖勉珊 &amp; <strong>杨嘉雨</strong> (2024)</div>
+          <div class="pub-journal en">Shanghai Urban Management, 33(01), 90–96</div>
+          <div class="pub-journal zh">上海城市管理，33(01)，90-96</div>
+          <div class="pub-badges">
+            <span class="badge badge-q2">AMI Core</span>
+            <span class="badge badge-q2 en">1st Student Author</span>
+            <span class="badge badge-q2 zh">学生一作</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKING PAPERS -->
+    <h3 class="section-label reveal" style="margin-top:3.5rem; margin-bottom:1.2rem;">
+      <span class="en">Working Papers</span>
+      <span class="zh">工作论文</span>
+    </h3>
+
+    <div class="wp-list reveal">
+      <div class="wp-item">
+        <div class="wp-dot active"></div>
+        <div>
+          <div class="wp-title">Physical Climate Risk and Outward Foreign Direct Investment: Evidence from China</div>
+          <div class="wp-authors">Wang, Y. Y., &amp; <strong>Yang, J.</strong> &nbsp;<span class="en">(1st Author)</span><span class="zh">（学生一作）</span></div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · IREF</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot active"></div>
+        <div>
+          <div class="wp-title">Heatwaves, Fiscal Adaptability, and Health Risks</div>
+          <div class="wp-authors"><strong>Yang, J.</strong>, Wang, H., et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · One Earth</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot active"></div>
+        <div>
+          <div class="wp-title">How Consumption Variety Affects Rent Prices: Evidence from Commercial Housing and Urban Villages</div>
+          <div class="wp-authors">Zhang, P., <strong>Yang, J.</strong>, et al. &nbsp;<span class="en">(1st Student Author)</span><span class="zh">（学生一作）</span></div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · Empirical Economics</span><span class="badge badge-q2">SSCI Q2</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot active"></div>
+        <div>
+          <div class="wp-title">The Impact of the Gambling Culture on Carbon Emissions</div>
+          <div class="wp-authors">Wang, Y., <strong>Yang, J.</strong>, et al. &nbsp;<span class="en">(1st Author)</span><span class="zh">（学生一作）</span></div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · Finance Research Letters</span><span class="badge badge-q1">SSCI Q1</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot active"></div>
+        <div>
+          <div class="wp-title">Air Pollution, Employee Health, and Managerial Short-Termism</div>
+          <div class="wp-authors">Wang, Y., <strong>Yang, J.</strong>, et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-prep">In Preparation</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">Supplier Physical Climate Risks, Customer Decisions, and the Mediating Role of Risk Perception</div>
+          <div class="wp-authors">Wang, Y., <strong>Yang, J.</strong>, et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-prep">In Preparation</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">Diversification vs Polarization: Evidence from the Supply Chain</div>
+          <div class="wp-authors">Wang, Y., <strong>Yang, J.</strong>, et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-prep">In Preparation</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">Does Religious Diversity Inhibit Giving Behaviors? Evidence from Chinese Immigrants</div>
+          <div class="wp-authors">Wang, Y., <strong>Yang, J.</strong>, et al. &nbsp;<span class="en">(2nd Author)</span><span class="zh">（学生二作）</span></div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · JSSR</span><span class="badge badge-q2">SSCI Q2</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">How does Social Integration Affect the Health of the Older Floating Population in China?</div>
+          <div class="wp-authors"><strong>Yang, J.</strong>, et al. &nbsp;<span class="en">(2nd Author)</span><span class="zh">（学生二作）</span></div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-review">Under Review · Social Science Quarterly</span><span class="badge badge-q2">SSCI Q2</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">Party-building Publicity and Corporate Innovation: Evidence from China</div>
+          <div class="wp-authors">Wang, H., <strong>Yang, J.</strong>, et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-prep">In Preparation</span></div>
+        </div>
+      </div>
+      <div class="wp-item">
+        <div class="wp-dot"></div>
+        <div>
+          <div class="wp-title">Housing Inequality under Extreme Weather: Evidence from New York</div>
+          <div class="wp-authors">Wang, H., <strong>Yang, J.</strong>, et al.</div>
+          <div class="pub-badges" style="margin-top:0.4rem;"><span class="badge badge-prep">In Preparation</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- RESEARCH EXPERIENCE -->
+<div class="section-wrap" id="research">
+  <div class="section-inner">
+    <p class="section-label reveal en">03 — Research Experience</p>
+    <p class="section-label reveal zh">03 — 科研经历</p>
+    <h2 class="section-title reveal">
+      <span class="en">Where the <em>questions</em> come from</span>
+      <span class="zh">问题从<em>哪里</em>来</span>
+    </h2>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.11 — <span class="en">Present</span><span class="zh">至今</span></div>
+        <div>
+          <div class="tl-title en">Graduate Researcher</div>
+          <div class="tl-title zh">硕士科研助理</div>
+          <div class="tl-place en">International Business School (ZIBS), Zhejiang University</div>
+          <div class="tl-place zh">浙江大学国际联合商学院（ZIBS）</div>
+          <div class="tl-sup en">Supervised by Prof. Wenyu Zhou (Economics)</div>
+          <div class="tl-sup zh">导师：周闻宇教授（经济学院）</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Modeled the evolution of China's macro asset efficient frontier (2005–2025) using equal-weight, risk parity, minimum variance, and maximum Sharpe approaches alongside ML methods (Lasso, XGBoost)</span><span class="zh">基于2005–2025年中国多类宏观资产日度数据，比较传统（等权、风险平价、最小方差、最大Sharpe）与ML方法（Lasso、XGBoost）在样本内框架下的资产配置表现</span></li>
+            <li><span class="en">Extracted 3V managerial signals (Visual, Vocal, Verbal) from equity fund pitch videos using multimodal foundation models to predict fund size and performance</span><span class="zh">利用多模态大模型对私募基金路演视频中的3V行为信号（视觉、声音、语言）进行量化，预测基金募集规模与业绩</span></li>
+            <li><span class="en">Constructed intraday/daily panel datasets for China A-shares to study closing auction activity, price deviations, and the role of passive ownership and Stock Connect in end-of-day trading</span><span class="zh">构建A股日内及日度面板数据集，研究收盘竞价机制、价格偏离与被动持股、互联互通对尾盘交易的影响</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.07 — <span class="en">Present</span><span class="zh">至今</span></div>
+        <div>
+          <div class="tl-title en">Research Assistant (RA)</div>
+          <div class="tl-title zh">科研助理（RA）</div>
+          <div class="tl-place en">International Business School (ZIBS), Zhejiang University</div>
+          <div class="tl-place zh">浙江大学国际联合商学院（ZIBS）</div>
+          <div class="tl-sup en">Supervised by Prof. Hua Wang (ZIBS)</div>
+          <div class="tl-sup zh">合作导师：王化教授（ZIBS）</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Heatwaves, Fiscal Adaptability, and Health Risks: built 2012–2022 panel dataset across 31 Chinese provinces; results show extreme heat significantly increases fiscal expenditure pressure and health risks, with fiscal adaptability as key moderator (Under Review: One Earth)</span><span class="zh">极端高温、财政适应力与健康风险：构建2012–2022年31省面板数据，发现高温显著加剧财政压力与健康风险，财政适应力为关键调节变量（已投稿One Earth）</span></li>
+            <li><span class="en">Housing Inequality under Extreme Weather (New York NYCHVS data): constructed Housing Quality Index via PCA; found heat significantly worsens health in low-income areas (Bronx, Queens, Brooklyn)</span><span class="zh">极端天气下的住房不平等（纽约NYCHVS数据）：通过主成分分析构建住房质量指数，发现高温对低收入区域（布朗克斯、皇后区）健康影响更为突出</span></li>
+            <li><span class="en">Party-building Publicity and Corporate Innovation: using 2012–2020 A-share data and WeChat party-building posts as proxy; found publicity significantly promotes innovation, especially in non-high-tech and weak-ESG firms</span><span class="zh">党建宣传与企业创新：以A股公司微信党建推文为代理变量，发现党建宣传显著促进创新，在非高科技、低ESG企业中效果更突出</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2024.09 — 2025.06</div>
+        <div>
+          <div class="tl-title en">Research Assistant (RA)</div>
+          <div class="tl-title zh">科研助理（RA）</div>
+          <div class="tl-place en">WeBank Institute of FinTech, Shenzhen University</div>
+          <div class="tl-place zh">深圳大学微众银行金融科技学院</div>
+          <div class="tl-sup en">Supervised by Prof. Yolanda Yulong Wang</div>
+          <div class="tl-sup zh">导师：王玉龙教授</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Physical Climate Risk and OFDI: constructed firm-level climate risk measures from high-frequency meteorological data; found extreme climate risk significantly increases outward FDI (Under Review: IREF, 1st Author)</span><span class="zh">物理气候风险与对外直接投资：从高频气象数据构建企业级气候风险度量，发现极端气候风险显著提升企业OFDI水平（已投稿IREF，一作）</span></li>
+            <li><span class="en">Supplier Physical Climate Risks & Customer Decisions: linked NOAA weather records to firm–supplier data (2008–2024); used ENSO-based IV strategy to show extreme heat significantly increases supplier substitution behaviors</span><span class="zh">供应商气候风险与客户决策：将NOAA高分辨率气象数据与企业供应链关系匹配（2008–2024），基于ENSO海温工具变量，发现极端高温显著促使客户增加供应商替换</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2023.04 — 2025.06</div>
+        <div>
+          <div class="tl-title en">Undergraduate Researcher</div>
+          <div class="tl-title zh">本科科研助理</div>
+          <div class="tl-place en">WeBank Institute of FinTech, Shenzhen University</div>
+          <div class="tl-place zh">深圳大学微众银行金融科技学院</div>
+          <div class="tl-sup en">Supervised by Prof. Yolanda Yulong Wang</div>
+          <div class="tl-sup zh">导师：王玉龙教授</div>
+          <ul class="tl-bullets">
+            <li><span class="en">CSR and Firm Litigation Risk: studied 20,000+ firm-year observations (2010–2019) using PSM-DID, IV, and Heckman two-stage models (Published: IRFA Q1, 1st Author)</span><span class="zh">企业社会责任与诉讼风险：基于2010–2019年逾2万条观测，采用PSM-DID、工具变量与Heckman两阶段模型（已发表IRFA Q1，一作）</span></li>
+            <li><span class="en">Air Pollution, Employee Health, and Managerial Short-Termism: 2014–2023 A-share sample; found pollution significantly intensifies short-termism; effect stronger in non-SOEs, labor-intensive and low-AI industries</span><span class="zh">空气污染、员工健康与管理层短视：2014–2023年A股样本，发现污染显著加剧短视行为，在非国企、劳动密集型和低AI行业效果更突出</span></li>
+            <li><span class="en">Gambling Culture and Carbon Emissions: A-share 2014–2023; paper Under Review at Finance Research Letters (SSCI Q1, 1st Author)</span><span class="zh">赌博文化与碳排放：A股2014–2023年数据，论文已投稿Finance Research Letters（SSCI Q1，一作）</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2022.09 — 2024.06</div>
+        <div>
+          <div class="tl-title en">Undergraduate Researcher &amp; Research Assistant</div>
+          <div class="tl-title zh">本科科研助理</div>
+          <div class="tl-place en">China Center for Special Economic Zone Research, Shenzhen University</div>
+          <div class="tl-place zh">深圳大学中国经济特区研究中心</div>
+          <div class="tl-sup en">Supervised by Prof. Ping Zhang</div>
+          <div class="tl-sup zh">导师：章平教授</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Capital Market Opening and Related Party Transactions: used Shanghai–Hong Kong / Shenzhen–Hong Kong Stock Connect as quasi-natural experiments; found market opening significantly curbs related-party transactions (Published: Applied Economics Q2, 2nd Author)</span><span class="zh">资本市场开放与关联交易：以沪深港通为准自然实验，发现资本市场开放显著抑制上市公司关联交易行为（已发表Applied Economics Q2，二作）</span></li>
+            <li><span class="en">How Consumption Variety Affects Rent Prices: big data from Shenzhen; found consumption diversity has no direct rent effect but income heterogeneity shapes spatial rent distribution (Under Review: Empirical Economics, 1st Student Author)</span><span class="zh">消费多样性对租金的影响：基于深圳大数据，发现消费多样性对租金无直接效应但收入异质性调节其空间分布（已投稿Empirical Economics，学生一作）</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- WORK EXPERIENCE -->
+<div class="section-wrap" id="experience">
+  <div class="section-inner">
+    <p class="section-label reveal en">04 — Industry Experience</p>
+    <p class="section-label reveal zh">04 — 产业经历</p>
+    <h2 class="section-title reveal">
+      <span class="en">Beyond the <em>lab</em></span>
+      <span class="zh">走出<em>实验室</em></span>
+    </h2>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.04 — 2025.07</div>
+        <div>
+          <div class="tl-title en">Business / AI Audit Intern</div>
+          <div class="tl-title zh">商业/AI审计实习生</div>
+          <div class="tl-place en">WeBank Co., Ltd. — Audit Department</div>
+          <div class="tl-place zh">微众银行 — 审计部</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Developed an end-to-end AI audit model: data processing → LLM fine-tuning → prompt engineering → deployment → testing</span><span class="zh">独立开发端到端AI审计模型，涵盖数据处理、大模型微调、提示词工程、部署与测试全流程</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2024.05 — 2024.07</div>
+        <div>
+          <div class="tl-title en">Industry Research Analyst</div>
+          <div class="tl-title zh">行业研究分析师</div>
+          <div class="tl-place en">Guotai Junan Securities — Overseas Technology Research</div>
+          <div class="tl-place zh">国泰君安证券 — 海外科技研究部</div>
+          <ul class="tl-bullets">
+            <li><span class="en">Conducted in-depth research on the global semiconductor industry, tracking technological innovation, supply chain dynamics, and competitive landscape</span><span class="zh">深度覆盖全球半导体产业，追踪技术创新、供应链变化与竞争格局</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- SKILLS -->
+<div class="section-wrap" id="skills">
+  <div class="section-inner">
+    <p class="section-label reveal en">05 — Skills</p>
+    <p class="section-label reveal zh">05 — 技能</p>
+    <h2 class="section-title reveal">
+      <span class="en">Toolkit &amp; <em>capabilities</em></span>
+      <span class="zh">工具箱与<em>能力</em></span>
+    </h2>
+    <div class="skills-grid reveal">
+      <div class="skill-group">
+        <div class="skill-group-label en">Econometrics</div>
+        <div class="skill-group-label zh">计量方法</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Panel Data</span>
+          <span class="skill-tag">DID</span>
+          <span class="skill-tag">PSM</span>
+          <span class="skill-tag">IV / 2SLS</span>
+          <span class="skill-tag">Heckman</span>
+          <span class="skill-tag en">Causal Inference</span>
+          <span class="skill-tag zh">因果推断</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label en">Programming</div>
+        <div class="skill-group-label zh">编程语言</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">R</span>
+          <span class="skill-tag">Stata</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">C / C++</span>
+          <span class="skill-tag">PHP / HTML</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label en">AI / ML</div>
+        <div class="skill-group-label zh">人工智能/机器学习</div>
+        <div class="skill-tags">
+          <span class="skill-tag">XGBoost / Lasso</span>
+          <span class="skill-tag en">LLM Fine-tuning</span>
+          <span class="skill-tag zh">大模型微调</span>
+          <span class="skill-tag en">Prompt Engineering</span>
+          <span class="skill-tag zh">提示词工程</span>
+          <span class="skill-tag en">Multimodal Models</span>
+          <span class="skill-tag zh">多模态模型</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label en">Languages</div>
+        <div class="skill-group-label zh">语言能力</div>
+        <div class="skill-tags">
+          <span class="skill-tag en">Chinese — Native</span>
+          <span class="skill-tag zh">中文 — 母语</span>
+          <span class="skill-tag">IELTS 7.0</span>
+          <span class="skill-tag">CET-6: 549</span>
+          <span class="skill-tag">CET-4: 638</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- CONTACT -->
+<div class="section-wrap" id="contact">
+  <div class="section-inner">
+    <p class="section-label reveal en">06 — Contact</p>
+    <p class="section-label reveal zh">06 — 联系方式</p>
+    <h2 class="section-title reveal">
+      <span class="en">Let's <em>connect</em></span>
+      <span class="zh">欢迎<em>联系</em></span>
+    </h2>
+    <div class="contact-inner">
+      <div class="contact-text reveal">
+        <p class="en">I'm actively seeking PhD opportunities in Finance, Financial Economics, or related fields. I'm always open to discussing research ideas, potential collaborations, or PhD supervision. Feel free to reach out — I try to respond within a few days.</p>
+        <p class="zh">我正积极申请金融、金融经济学或相关领域的博士项目，欢迎就科研合作、博士招生或学术交流与我联系，通常会在几天内回复。</p>
+        <br />
+        <p style="color:var(--fg3); font-size:0.83rem;" class="en">Currently based at Zhejiang University, Hangzhou, China.</p>
+        <p style="color:var(--fg3); font-size:0.83rem;" class="zh">现居中国浙江省杭州市，浙江大学。</p>
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:jiayu_yang@zju.edu.cn" class="contact-link">
+          <span class="contact-link-icon">✉</span>
+          <div>
+            <span class="contact-link-label en">Email</span>
+            <span class="contact-link-label zh">邮箱</span>
+            jiayu_yang@zju.edu.cn
+          </div>
+        </a>
+        <a href="tel:+8618368305727" class="contact-link">
+          <span class="contact-link-icon">◉</span>
+          <div>
+            <span class="contact-link-label en">Phone</span>
+            <span class="contact-link-label zh">手机</span>
+            +86 183 6830 5727
+          </div>
+        </a>
+        <div class="contact-link" style="cursor:default;">
+          <span class="contact-link-icon">⌖</span>
+          <div>
+            <span class="contact-link-label en">Address</span>
+            <span class="contact-link-label zh">地址</span>
+            <span class="en">No. 866 Yuhangtang Rd, Xihu, Hangzhou, Zhejiang</span>
+            <span class="zh">浙江省杭州市西湖区余杭塘路866号</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 YANG Jiayu &nbsp;·&nbsp; <span class="en">Hangzhou, China</span><span class="zh">中国·杭州</span>
+</footer>
+
+<script>
+  // NAV scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+  // REVEAL
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const siblings = [...(entry.target.parentElement?.querySelectorAll('.reveal:not(.visible)') || [])];
+        const idx = siblings.indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('visible'), Math.min(idx * 80, 280));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // THEME
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.dataset.theme === 'dark';
+    html.dataset.theme = isDark ? 'light' : 'dark';
+    document.getElementById('themeBtn').innerHTML = isDark ? '<span class="en">Dark</span><span class="zh">深色</span>' : '<span class="en">Light</span><span class="zh">浅色</span>';
+    localStorage.setItem('theme', html.dataset.theme);
+  }
+
+  // LANG
+  function toggleLang() {
+    const html = document.documentElement;
+    const isEn = html.dataset.lang === 'en';
+    html.dataset.lang = isEn ? 'zh' : 'en';
+    html.lang = isEn ? 'zh' : 'en';
+    const btn = document.getElementById('langBtn');
+    btn.textContent = isEn ? 'EN' : '中文';
+    localStorage.setItem('lang', html.dataset.lang);
+  }
+
+  // Restore prefs
+  const savedTheme = localStorage.getItem('theme');
+  const savedLang = localStorage.getItem('lang');
+  if (savedTheme) {
+    document.documentElement.dataset.theme = savedTheme;
+    document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '<span class="en">Light</span><span class="zh">浅色</span>' : '<span class="en">Dark</span><span class="zh">深色</span>';
+  }
+  if (savedLang) {
+    document.documentElement.dataset.lang = savedLang;
+    document.documentElement.lang = savedLang;
+    document.getElementById('langBtn').textContent = savedLang === 'en' ? '中文' : 'EN';
+  }
+</script>
+</body>
+</html>
